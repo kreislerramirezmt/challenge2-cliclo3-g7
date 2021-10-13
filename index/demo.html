@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio AJAX</title>
+    <link rel="stylesheet" href="/public/assets/plugins/Sweetalert2/11.1.7/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="/public/assets/plugins/SemanticUICSS/2.4.1/semantic.min.css">
+    <script type="text/javascript" src="/public/assets/plugins/JQuery/3.6.0/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/public/assets/plugins/Sweetalert2/11.1.7/js/sweetalert2.min.js"></script>
+    <script type="text/javascript" src="/public/assets/plugins/SemanticUICSS/2.4.1/semantic.min.js"></script>
+    <script type="text/javascript" src="/public/assets/plugins/BlueimpJavaScriptTemplates/3.20.0/js/tmpl.min.js"></script>
+    <script type="text/javascript" src="/public/assets/plugins/Navigo/8.11.1/navigo.js"></script>
+    <script type="text/javascript" src="js/consultar.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+</head>
+<body>
+<!--<h3>
+    Titulo de mi página
+</h3>
+<label>ID</label>
+<input id="id" type="text"/>
+<br/>
+<label>Nombre</label>
+<input id="nombre" type="text"/>
+<br/>
+<label>Edad</label>
+<input id="edad" type="text"/>
+<br/>
+<label>Color</label>
+<input id="color" type="text"/>
+<br/>
+<button onclick="guardar()">Guardar</button>
+
+<p>
+    Esta es mi primera pagina web
+</p>
+<button onclick="consultar()">Consultar datos</button>
+<div id="tabla"></div>
+<div id="temp"></div>
+<a href="/another" data-navigo>Another</a>
+<a href="/" data-navigo>Home</a>
+<a href="/user/42/save?h=2" data-navigo>Id</a>-->
+
+<div class="ui two column centered grid">
+    <div class="column">
+        <h2 class="ui center aligned icon header"><i class="github alternate icon"></i> Mascotas </h2>
+        <div class="" id="result">
+
+        </div>
+        <div>
+            <table class="ui compact celled definition table transition hidden" style="">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Color</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="collapsing">
+                        {{id}}
+                    </td>
+                    <td>{{nombre}}</td>
+                    <td>{{edad}}</td>
+                    <td>{{color}}</td>
+                    <td>
+                        <div class="tiny ui buttons">
+                            <button class="ui negative button">Eliminar</button>
+                            <div class="or" data-text="ó"></div>
+                            <button class="ui blue button">Editar</button>
+                        </div></td>
+                </tr>
+                </tbody>
+                <tfoot class="full-width">
+                <tr>
+                    <th></th>
+                    <th colspan="4">
+                        <div class="ui right floated small primary labeled icon inverted button" onclick="$('#modalmascotacrear').modal('show');">
+                            <i class="github alternate icon"></i> Añadir mascota
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="ui basic modal" id="modalmascotacrear">
+    <div class="ui icon header">
+        <i class="github alternate icon"></i>
+        Agrega una nueva mascota!
+    </div>
+    <div class="content">
+        <div class="ui inverted form">
+            <div class="three fields">
+                <div class="field">
+                    <label>Id</label>
+                    <input type="text" id="id" placeholder="Id">
+                </div>
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" id="nombre" placeholder="Nombre">
+                </div>
+                <div class="field">
+                    <label>Edad</label>
+                    <input type="text" id="edad" placeholder="Edad">
+                </div>
+                <div class="field">
+                    <label>Color</label>
+                    <input type="text" id="color" placeholder="Color">
+                </div>
+                <div class="field" style="display: none;">
+                    <label>Raza</label>
+                    <input type="text" id="raza" placeholder="Raza">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui red basic cancel inverted button">
+            <i class="remove icon"></i>
+            Cancelar
+        </div>
+        <div class="ui green ok inverted button" id="savemascotas">
+            <i class="checkmark icon"></i>
+            Guardar
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/x-tmpl" id="tmpl-mascotasdetalle">
+<h1>Detalle de Gato</h1>
+        ID <input type="number" id="id" value="{%=o.id%}" disabled /> <br/>
+        Nombre <input type="text" id="nombre" value="{%=o.nombre%}" /> <br/>
+        Edad <input type="number" id="edad" value="{%=o.edad%}" /> <br/>
+        Color <input type="text" id="color" value="{%=o.color%}" /> <br/>
+        <button id="boton">Actualizar</button>
+
+        <br/><br/><br/>
+        <a href="#/">Ir al Inicio</a>
+
+</script>
+<script type="text/x-tmpl" id="tmpl-mascotastable">
+<table class="ui compact celled definition table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Color</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+  {% for (var i=0; i<o.items.length; i++) { %}
+      <tr>
+        <td class="collapsing">
+            {%=o.items[i].id%}
+        </td>
+        <td>{%=o.items[i].nombre%}</td>
+        <td>{%=o.items[i].edad%}</td>
+        <td>{%=o.items[i].color%}</td>
+        <td>
+            <div class="tiny ui buttons">
+            <button class="ui negative button" data-mascotas-id="{%=o.items[i].id%}">Eliminar</button>
+            <div class="or" data-text="ó"></div>
+            <a class="ui blue button" href="#/pets/{%=o.items[i].id%}/edit" data-navigo>Editar</a>
+        </div>
+        </td>
+      </tr>
+  {% } %}
+</tbody>
+            <tfoot class="full-width">
+            <tr>
+                <th></th>
+                <th colspan="4">
+                    <div class="ui right floated small primary labeled icon inverted button" onclick="$('#modalmascotacrear').modal('show');">
+                        <i class="github alternate icon"></i> Añadir mascota
+                    </div>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+</script>
+</html>
