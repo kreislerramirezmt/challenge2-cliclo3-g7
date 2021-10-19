@@ -415,7 +415,7 @@ window.addEventListener("load", () => {
         .on('/message', () => {
             Toast.fire({
                 icon: 'success',
-                title: 'Cargando tabla de computadores...'
+                title: 'Cargando tabla de mensajes...'
             });
             drawTableMessage();
         },{
